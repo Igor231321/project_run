@@ -22,7 +22,7 @@ from app_run import views
 from app_run.views import RunViewSet
 
 router = DefaultRouter()
-router.register('api/runs/', RunViewSet)
+router.register('api/runs', RunViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
