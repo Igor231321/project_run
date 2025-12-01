@@ -4,5 +4,6 @@ from app_run.models import Run
 
 
 class RunSerializer(serializers.ModelSerializer):
-    model = Run
-    fields = '__all__'
+    class Meta:
+        model = Run
+        fields = ['authlete', 'created_at', 'comment']
