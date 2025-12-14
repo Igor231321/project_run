@@ -29,3 +29,4 @@ urlpatterns = [
     path('api/company_details/', views.company_details),
     path("", include(router.urls))
 ]
+
