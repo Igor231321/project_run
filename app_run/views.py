@@ -1,9 +1,10 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.views import APIView
 
 from app_run.models import Run
 from app_run.serializers import RunSerializer, UsersSerializer
@@ -39,3 +40,25 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             return qs.filter(is_staff=False)
         else:
             return qs
+
+
+class UserRunStart(APIView):
+    def patch(self, request, run_id):
+        run = get_object_or_404(Run, id=run_id)
+        if run.status not in ['IN']:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            run.status = Run.Status.IN_PROGRESS
+            run.save()
+            return Response({"run_id": run.id, "status": run.status.label}, status=status.HTTP_201_CREATED)
+
+
+class UserRunStop(APIView):
+    def patch(self, request, run_id):
+        run = get_object_or_404(Run, id=run_id)
+        if run.status not in ['PR']:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            run.status = Run.Status.FINISHED
+            run.save()
+            return Response({"run_id": run.id, "status": run.status.label}, status=status.HTTP_201_CREATED)
