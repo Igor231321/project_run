@@ -19,7 +19,7 @@ def company_details(request):
 
 class RunViewSet(viewsets.ModelViewSet):
     serializer_class = RunSerializer
-    queryset = Run.objects.all()
+    queryset = Run.objects.select_related("athlete")
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -33,6 +33,6 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         if user_type == 'coach':
             return qs.filter(is_staff=True)
         elif user_type == 'athlete':
-            return  qs.filter(is_staff=False)
+            return qs.filter(is_staff=False)
         else:
             return qs
