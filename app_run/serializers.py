@@ -11,7 +11,7 @@ class AthleteSerializer(serializers.ModelSerializer):
 
 
 class RunSerializer(serializers.ModelSerializer):
-    athlete = AthleteSerializer(source='athlete_data')
+    athlete_data = AthleteSerializer(source='athlete')
 
     class Meta:
         model = Run
