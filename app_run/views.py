@@ -98,3 +98,4 @@ class AthleteInfoAPIView(APIView):
                                                                      defaults={"weight": weight,
                                                                                "goals": data["goals"]})
         return Response(status=status.HTTP_201_CREATED)
+
