@@ -50,7 +50,7 @@ class UserRunStart(APIView):
         else:
             run.status = Run.Status.IN_PROGRESS
             run.save()
-            return Response({"run_id": run.id, "status": run.status.label}, status=status.HTTP_201_CREATED)
+            return Response({"run_id": run.id, "status": run.status.label}, status=status.HTTP_200_OK)
 
 
 class UserRunStop(APIView):
@@ -61,4 +61,4 @@ class UserRunStop(APIView):
         else:
             run.status = Run.Status.FINISHED
             run.save()
-            return Response({"run_id": run.id, "status": run.status.label}, status=status.HTTP_201_CREATED)
+            return Response({"run_id": run.id, "status": run.status.label}, status=status.HTTP_200_OK)
