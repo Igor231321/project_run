@@ -88,7 +88,7 @@ class AthleteInfoAPIView(APIView):
 
     def put(self, request, user_id):
         data = request.data
-        weight = data['weight']
+        weight = int(data['weight'])
 
         if 0 < weight > 900:
             return Response(status=status.HTTP_400_BAD_REQUEST)
