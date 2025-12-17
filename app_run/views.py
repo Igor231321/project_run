@@ -115,11 +115,10 @@ class ChallengesListAPIView(ListAPIView):
     serializer_class = ChallengeSerializer
 
     def get_queryset(self):
-        qs = self.queryset
+        qs = super().get_queryset()
 
         athlete_id = self.request.query_params.get('athlete')
         if athlete_id:
-            athlete = get_object_or_404(User, id=int(athlete_id))
-            qs = qs.filter(athlete=athlete)
+            qs = qs.filter(athlete_id=athlete_id)
 
         return qs
