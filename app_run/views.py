@@ -90,7 +90,7 @@ class AthleteInfoAPIView(APIView):
         data = request.data
         weight = data['weight']
 
-        if weight not in range(1, 900):
+        if 0 < weight > 900:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         user = get_object_or_404(User, id=user_id)
