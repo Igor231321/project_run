@@ -6,7 +6,7 @@ class Run(models.Model):
     class Status(models.TextChoices):
         INIT = 'init', 'init'
         IN_PROGRESS = 'in_progress', 'in_progress'
-        FINISHED = 'finished' 'finished'
+        FINISHED = 'finished', 'finished'
 
     athlete = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
