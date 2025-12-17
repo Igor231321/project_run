@@ -93,7 +93,7 @@ class AthleteInfoAPIView(APIView):
         except (TypeError, ValueError):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        if 0 < int(weight) < 900:
+        if not (0 < int(weight) < 900):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         user = get_object_or_404(User, id=user_id)
