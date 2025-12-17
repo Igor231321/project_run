@@ -76,10 +76,10 @@ class UserRunStop(APIView):
             run.status = Run.Status.FINISHED
             run.save()
             count_runs = Run.objects.filter(status=Run.Status.FINISHED,
-                                            athlete=request.user).count()
+                                            athlete=run.athlete).count()
             if count_runs == 10:
                 Challenge.objects.create(full_name='Сделай 10 Забегов!',
-                                         athlete=request.user)
+                                         athlete=run.athlete)
             return Response({"run_id": run.id, "status": run.status.label}, status=status.HTTP_200_OK)
 
 
