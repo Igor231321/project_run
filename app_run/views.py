@@ -45,7 +45,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class UserRunStart(APIView):
     def post(self, request, run_id):
         run = get_object_or_404(Run, id=run_id)
-        if run.status not in ['IN']:
+        if run.status not in ['init']:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
             run.status = Run.Status.IN_PROGRESS
@@ -56,7 +56,7 @@ class UserRunStart(APIView):
 class UserRunStop(APIView):
     def post(self, request, run_id):
         run = get_object_or_404(Run, id=run_id)
-        if run.status not in ['PR']:
+        if run.status not in ['in_progress']:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
             run.status = Run.Status.FINISHED
