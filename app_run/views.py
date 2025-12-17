@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 
-from app_run.models import Run
+from app_run.models import Run, AthleteInfo
 from app_run.serializers import RunSerializer, UsersSerializer
 
 
@@ -25,7 +25,6 @@ class Paginator(PageNumberPagination):
     page_size_query_param = 'size'
     # max_page_size = 5
     # page_size = 5
-
 
 
 class RunViewSet(viewsets.ModelViewSet):
@@ -77,3 +76,25 @@ class UserRunStop(APIView):
             run.status = Run.Status.FINISHED
             run.save()
             return Response({"run_id": run.id, "status": run.status.label}, status=status.HTTP_200_OK)
+
+
+class AthleteInfoAPIView(APIView):
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+
+        athlete_data, created = AthleteInfo.objects.get_or_create(user=user)
+        return Response({"athlete_info": athlete_data.id})
+
+    def put(self, request, user_id):
+        data = request.data
+        weight = data['weight']
+
+        if weight not in range(1, 900):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        user = get_object_or_404(User, id=user_id)
+
+        athlete_data, created = AthleteInfo.objects.update_or_create(user=user,
+                                                                     defaults={"weight": weight,
+                                                                               "goals": data["goals"]})
+        return Response(status=status.HTTP_201_CREATED)
