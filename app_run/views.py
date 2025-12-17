@@ -118,8 +118,8 @@ class ChallengesListAPIView(ListAPIView):
         qs = self.queryset
 
         athlete_id = self.request.query_params.get('athlete')
-        athlete = get_object_or_404(User, id=int(athlete_id))
         if athlete_id:
+            athlete = get_object_or_404(User, id=int(athlete_id))
             qs = qs.filter(athlete=athlete)
 
         return qs
