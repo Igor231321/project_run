@@ -25,3 +25,12 @@ class AthleteInfo(models.Model):
 
     def __str__(self):
         return f'{self.user} ({self.weight}, {self.goals})'
+
+
+
+class Challenge(models.Model):
+    full_name = models.CharField(max_length=255)
+    athlete = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.full_name} {self.athlete}'

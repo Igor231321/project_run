@@ -2,14 +2,14 @@ from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.generics import get_object_or_404
+from rest_framework.generics import get_object_or_404, ListAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 
-from app_run.models import Run, AthleteInfo
-from app_run.serializers import RunSerializer, UsersSerializer
+from app_run.models import Run, AthleteInfo, Challenge
+from app_run.serializers import RunSerializer, UsersSerializer, ChallengeSerializer
 
 
 @api_view(['GET'])
@@ -75,6 +75,11 @@ class UserRunStop(APIView):
         else:
             run.status = Run.Status.FINISHED
             run.save()
+            count_runs = Run.objects.filter(status=Run.Status.FINISHED,
+                                            athlete=request.user).count()
+            if count_runs == 10:
+                Challenge.objects.create(full_name='Сделай 10 Забегов!',
+                                         athlete=request.user)
             return Response({"run_id": run.id, "status": run.status.label}, status=status.HTTP_200_OK)
 
 
@@ -103,3 +108,18 @@ class AthleteInfoAPIView(APIView):
                                                                                "goals": data["goals"]})
         return Response({"user_id": athlete_data.user.id, "goals": athlete_data.goals,
                          "weight": athlete_data.weight}, status=status.HTTP_201_CREATED)
+
+
+class ChallengesListAPIView(ListAPIView):
+    queryset = Challenge.objects.all()
+    serializer_class = ChallengeSerializer
+
+    def get_queryset(self):
+        qs = self.queryset
+
+        athlete_id = self.request.query_params.get('athlete')
+        athlete = get_object_or_404(User, id=int(athlete_id))
+        if athlete_id:
+            qs = qs.filter(athlete=athlete)
+
+        return qs
