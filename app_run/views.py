@@ -83,7 +83,8 @@ class AthleteInfoAPIView(APIView):
         user = get_object_or_404(User, id=user_id)
 
         athlete_data, created = AthleteInfo.objects.get_or_create(user=user)
-        return Response({"athlete_info": athlete_data.id})
+        return Response({"user_id": athlete_data.user.id, "goals": athlete_data.goals,
+                         "weight": athlete_data.weight})
 
     def put(self, request, user_id):
         data = request.data
@@ -97,5 +98,5 @@ class AthleteInfoAPIView(APIView):
         athlete_data, created = AthleteInfo.objects.update_or_create(user=user,
                                                                      defaults={"weight": weight,
                                                                                "goals": data["goals"]})
-        return Response(status=status.HTTP_201_CREATED)
-
+        return Response({"user_id": athlete_data.user.id, "goals": athlete_data.goals,
+                         "weight": athlete_data.weight}, status=status.HTTP_201_CREATED)
